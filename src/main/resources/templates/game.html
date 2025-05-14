@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巧巧消消乐 - 可爱的消除游戏</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/game.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+<div class="game-container">
+    <header>
+        <h1>巧巧消消乐</h1>
+        <div class="game-info">
+            <div class="score">分数: <span id="score">0</span></div>
+            <div class="moves">剩余步数: <span id="moves-left">20</span></div>
+        </div>
+    </header>
+
+    <div class="game-board" id="game-board">
+        <!-- 游戏面板将由JavaScript动态生成 -->
+    </div>
+
+    <div class="game-controls">
+        <button id="new-game-btn" class="btn">新游戏</button>
+        <button id="help-btn" class="btn">帮助</button>
+    </div>
+
+    <div class="modal" id="game-over-modal">
+        <div class="modal-content">
+            <h2>游戏结束!</h2>
+            <p>您的最终得分是: <span id="final-score">0</span></p>
+            <button id="restart-btn" class="btn">再玩一次</button>
+            <button id="share-btn" class="btn">分享成绩</button>
+        </div>
+    </div>
+
+    <div class="modal" id="help-modal">
+        <div class="modal-content">
+            <h2>游戏规则</h2>
+            <p>交换相邻的瓦片，尝试匹配三个或更多相同颜色的瓦片。</p>
+            <p>每次成功匹配将获得积分。</p>
+            <p>在规定步数内获得尽可能高的分数!</p>
+            <button id="close-help-btn" class="btn">关闭</button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/main.js"></script>
+<script src="/js/game/board.js"></script>
+<script src="/js/game/tile.js"></script>
+<script src="/js/game/animation.js"></script>
+<script src="/js/game/sound.js"></script>
+<script src="/js/game/gameLogic.js"></script>
+</body>
+</html>

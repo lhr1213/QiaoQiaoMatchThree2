@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巧巧消消乐 - 个人资料</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 4px solid var(--primary-color);
+        }
+
+        .profile-info {
+            flex-grow: 1;
+        }
+
+        .profile-nickname {
+            font-size: 1.8rem;
+            margin: 0 0 5px 0;
+            color: var(--text-color);
+        }
+
+        .profile-username {
+            color: #888;
+            margin: 0 0 10px 0;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .stat {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .profile-tabs {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .profile-tab {
+            flex-grow: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .profile-tab:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .profile-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #f8bbd0;
+            border-radius: 30px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #e91e63;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            color: #2e7d32;
+        }
+
+        .alert-danger {
+            background-color: #ffebee;
+            border: 1px solid #ef9a9a;
+            color: #c62828;
+        }
+
+        .game-history {
+            margin-top: 20px;
+        }
+
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: transform 0.2s;
+        }
+
+        .game-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .game-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .avatar-upload {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 4px solid var(--primary-color);
+        }
+
+        .avatar-input {
+            display: none;
+        }
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .achievement {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .achievement:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .achievement-locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .achievement-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .achievement-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="profile-container">
+    <div class="profile-header">
+        <img th:src="${user.avatar != null ? user.avatar : '/images/ui/default-avatar.png'}" alt="用户头像" class="profile-avatar">
+
+        <div class="profile-info">
+            <h1 class="profile-nickname" th:text="${user.nickname}">消消达人</h1>
+            <p class="profile-username" th:text="${'@' + user.username}">@xiaoxiao</p>
+
+            <div class="profile-stats">
+                <div class="stat">
+                    <span th:text="${user.highestScore}">5230</span> 最高分
+                </div>
+                <div class="stat">
+                    <span th:text="${user.totalGames}">42</span> 游戏次数
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div th:if="${message}" class="alert alert-success" th:text="${message}">
+        个人资料更新成功
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}">
+        操作失败
+    </div>
+
+    <div class="profile-tabs">
+        <div class="profile-tab active" data-tab="profile">个人资料</div>
+        <div class="profile-tab" data-tab="games">游戏记录</div>
+        <div class="profile-tab" data-tab="achievements">成就</div>
+        <div class="profile-tab" data-tab="stats">数据统计</div>
+    </div>
+
+    <!-- 个人资料选项卡 -->
+    <div id="profile-tab" class="tab-content active">
+        <form action="/user/profile/update" method="post" enctype="multipart/form-data">
+            <div class="avatar-upload">
+                <img th:src="${user.avatar != null ? user.avatar : '/images/ui/default-avatar.png'}" alt="头像预览" class="avatar-preview" id="avatar-preview">
+
+                <div>
+                    <label for="avatar-input" class="btn">更换头像</label>
+                    <input type="file" id="avatar-input" name="avatar" class="avatar-input" accept="image/*">
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">图片大小不超过2MB</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nickname">昵称</label>
+                <input type="text" id="nickname" name="nickname" class="form-control" th:value="${user.nickname}">
+            </div>
+
+            <div class="form-group">
+                <label for="email">邮箱</label>
+                <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" readonly>
+                <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">邮箱不可更改</p>
+            </div>
+
+            <button type="submit" class="btn">保存更改</button>
+        </form>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #f8bbd0;">
+
+        <h2>修改密码</h2>
+
+        <form action="/user/profile/change-password" method="post">
+            <div class="form-group">
+                <label for="old-password">当前密码</label>
+                <input type="password" id="old-password" name="oldPassword" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="new-password">新密码</label>
+                <input type="password" id="new-password" name="newPassword" class="form-control" required minlength="8">
+                <div id="password-strength" class="password-strength"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">确认新密码</label>
+                <input type="password" id="confirm-password" name="confirmPassword" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn">修改密码</button>
+        </form>
+    </div>
+
+    <!-- 游戏记录选项卡 -->
+    <div id="games-tab" class="tab-content">
+        <h2>游戏记录</h2>
+
+        <div class="game-history">
+            <!-- 使用Thymeleaf遍历游戏记录 -->
+            <div th:each="score : ${scores}" class="game-item">
+                <div>
+                    <div th:text="${score.gameMode + ' 模式'}">经典模式</div>
+                    <div class="game-date" th:text="${#temporals.format(score.createdAt, 'yyyy-MM-dd HH:mm')}">2025-05-10 14:23</div>
+                </div>
+                <div class="game-score" th:text="${score.score}">5230</div>
+            </div>
+
+            <!-- 示例数据 -->
+            <div class="game-item">
+                <div>
+                    <div>经典模式</div>
+                    <div class="game-date">2025-05-10 14:23</div>
+                </div>
+                <div class="game-score">5230</div>
+            </div>
+            <div class="game-item">
+                <div>
+                    <div>限时模式</div>
+                    <div class="game-date">2025-05-09 18:45</div>
+                </div>
+                <div class="game-score">4150</div>
+            </div>
+            <div class="game-item">
+                <div>
+                    <div>经典模式</div>
+                    <div class="game-date">2025-05-08 20:12</div>
+                </div>
+                <div class="game-score">3980</div>
+            </div>
+        </div>
+
+        <button class="btn" style="margin-top: 20px;">加载更多</button>
+    </div>
+
+    <!-- 成就选项卡 -->
+    <div id="achievements-tab" class="tab-content">
+        <h2>成就</h2>
+
+        <div class="achievements">
+            <!-- 已解锁的成就 -->
+            <div class="achievement">
+                <div class="achievement-icon">🎮</div>
+                <div class="achievement-name">初次尝试</div>
+                <div class="achievement-description">完成第一局游戏</div>
+            </div>
+
+            <div class="achievement">
+                <div class="achievement-icon">🏆</div>
+                <div class="achievement-name">高分达人</div>
+                <div class="achievement-description">单局得分超过5000分</div>
+            </div>
+
+            <div class="achievement">
+                <div class="achievement-icon">🔥</div>
+                <div class="achievement-name">连击大师</div>
+                <div class="achievement-description">完成10次连续消除</div>
+            </div>
+
+            <!-- 未解锁的成就 -->
+            <div class="achievement achievement-locked">
+                <div class="achievement-icon">💎</div>
+                <div class="achievement-name">收集者</div>
+                <div class="achievement-description">解锁所有特殊瓦片</div>
+            </div>
+
+            <div class="achievement achievement-locked">
+                <div class="achievement-icon">⭐</div>
+                <div class="achievement-name">超级玩家</div>
+                <div class="achievement-description">完成100局游戏</div>
+            </div>
+
+            <div class="achievement achievement-locked">
+                <div class="achievement-icon">👑</div>
+                <div class="achievement-name">消除之王</div>
+                <div class="achievement-description">单局得分超过10000分</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据统计选项卡 -->
+    <div id="stats-tab" class="tab-content">
+        <h2>数据统计</h2>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" th:text="${user.highestScore}">5230</div>
+                <div class="stat-label">最高分数</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" th:text="${user.totalGames}">42</div>
+                <div class="stat-label">游戏总次数</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" th:text="${averageScore != null ? #numbers.formatDecimal(averageScore, 0, 0) : '0'}">3680</div>
+                <div class="stat-label">平均分数</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">最大连消次数</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">排行榜排名</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">已获得成就</div>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 30px;">分数分布</h3>
+        <div style="height: 200px; background-color: rgba(255, 255, 255, 0.6); border-radius: 10px; margin-top: 10px;">
+            <!-- 这里可以放置图表，实际项目中可以使用Chart.js等库实现 -->
+            <div style="text-align: center; padding-top: 90px; color: #888;">
+                分数分布图表
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/game" class="btn">开始新游戏</a>
+        <a href="/score/leaderboard" class="btn">查看排行榜</a>
+        <a href="/user/logout" class="btn" style="background-color: #f06292;">退出登录</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 选项卡切换
+        const tabs = document.querySelectorAll('.profile-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // 添加当前标签的active类
+                this.classList.add('active');
+
+                // 显示对应的内容
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId + '-tab').classList.add('active');
+            });
+        });
+
+        // 头像预览
+        const avatarInput = document.getElementById('avatar-input');
+        const avatarPreview = document.getElementById('avatar-preview');
+
+        if (avatarInput && avatarPreview) {
+            avatarInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(this.files[0]);
+
+                    // 检查文件大小
+                    if (this.files[0].size > 2 * 1024 * 1024) {
+                        alert('头像图片不能超过2MB');
+                        this.value = '';
+                    }
+                }
+            });
+        }
+
+        // 密码强度检查
+        const newPasswordInput = document.getElementById('new-password');
+        const passwordStrength = document.getElementById('password-strength');
+
+        if (newPasswordInput && passwordStrength) {
+            newPasswordInput.addEventListener('input', function() {
+                checkPasswordStrength(this.value);
+            });
+
+            function checkPasswordStrength(password) {
+                // 计算密码强度
+                let strength = 0;
+
+                // 长度检查
+                if (password.length >= 8) {
+                    strength += 1;
+                }
+
+                // 字符类型检查
+                if (/[A-Z]/.test(password)) {
+                    strength += 1;
+                }
+
+                if (/[a-z]/.test(password)) {
+                    strength += 1;
+                }
+
+                if (/[0-9]/.test(password)) {
+                    strength += 1;
+                }
+
+                if (/[^A-Za-z0-9]/.test(password)) {
+                    strength += 1;
+                }
+
+                // 更新强度显示
+                let strengthText = '';
+                let strengthClass = '';
+
+                switch (strength) {
+                    case 0:
+                    case 1:
+                        strengthText = '弱';
+                        strengthClass = 'text-danger';
+                        break;
+                    case 2:
+                    case 3:
+                        strengthText = '中';
+                        strengthClass = 'text-warning';
+                        break;
+                    case 4:
+                    case 5:
+                        strengthText = '强';
+                        strengthClass = 'text-success';
+                        break;
+                }
+
+                passwordStrength.textContent = `密码强度: ${strengthText}`;
+                passwordStrength.className = 'password-strength ' + strengthClass;
+            }
+        }
+
+        // 确认密码验证
+        const confirmPasswordInput = document.getElementById('confirm-password');
+
+        if (confirmPasswordInput && newPasswordInput) {
+            confirmPasswordInput.addEventListener('input', function() {
+                if (this.value !== newPasswordInput.value) {
+                    this.setCustomValidity('两次输入的密码不一致');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

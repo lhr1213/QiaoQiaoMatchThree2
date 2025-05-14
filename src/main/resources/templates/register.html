@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巧巧消消乐 - 注册</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <style>
+        .register-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .register-form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #f8bbd0;
+            border-radius: 30px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .form-control.is-invalid {
+            border-color: #f44336;
+        }
+
+        .form-control.is-valid {
+            border-color: #4caf50;
+        }
+
+        .invalid-feedback {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 5px;
+            margin-left: 10px;
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #e91e63;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .form-footer a:hover {
+            color: #e91e63;
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-danger {
+            background-color: #ffebee;
+            border: 1px solid #ef9a9a;
+            color: #c62828;
+        }
+
+        .password-strength {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .password-requirements {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            padding-left: 10px;
+        }
+
+        .password-requirements ul {
+            margin: 5px 0 0 15px;
+            padding: 0;
+        }
+
+        .password-requirements li {
+            margin-bottom: 3px;
+        }
+
+        .password-requirements li.met {
+            color: #4caf50;
+        }
+
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 3px solid #f8bbd0;
+        }
+
+        .avatar-upload {
+            flex-grow: 1;
+        }
+
+        .avatar-input {
+            display: none;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .terms-checkbox input {
+            margin-top: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <div class="form-header">
+        <h1>巧巧消消乐</h1>
+        <p>注册账户开启消除之旅</p>
+    </div>
+
+    <div class="register-form">
+        <!-- 错误提示 -->
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}">
+            注册失败，请重试
+        </div>
+
+        <form action="/user/register" method="post" enctype="multipart/form-data">
+            <div class="avatar-section">
+                <img src="/images/ui/default-avatar.png" alt="头像预览" class="avatar-preview" id="avatar-preview">
+                <div class="avatar-upload">
+                    <label for="avatar-input" class="btn" style="margin: 0;">选择头像</label>
+                    <input type="file" id="avatar-input" name="avatar" class="avatar-input" accept="image/*">
+                    <p style="font-size: 13px; color: #666; margin-top: 5px;">可选，大小不超过2MB</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username">用户名 *</label>
+                <input type="text" id="username" name="username" class="form-control" required minlength="3" maxlength="20">
+                <div id="username-error" class="invalid-feedback">用户名已被使用</div>
+                <div class="password-requirements">
+                    <small>用户名长度为3-20个字符，只能包含字母、数字和下划线</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">邮箱 *</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+                <div id="email-error" class="invalid-feedback">邮箱已被使用</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码 *</label>
+                <input type="password" id="password" name="password" class="form-control" required minlength="8">
+                <div id="password-strength" class="password-strength"></div>
+                <div class="password-requirements">
+                    <small>密码要求：</small>
+                    <ul>
+                        <li id="req-length">至少8个字符</li>
+                        <li id="req-uppercase">至少一个大写字母</li>
+                        <li id="req-lowercase">至少一个小写字母</li>
+                        <li id="req-number">至少一个数字</li>
+                        <li id="req-special">至少一个特殊字符</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">确认密码 *</label>
+                <input type="password" id="confirm-password" name="confirmPassword" class="form-control" required>
+                <div id="confirm-password-error" class="invalid-feedback">两次输入的密码不一致</div>
+            </div>
+
+            <div class="form-group">
+                <label for="nickname">昵称</label>
+                <input type="text" id="nickname" name="nickname" class="form-control">
+                <div class="password-requirements">
+                    <small>可选，默认使用用户名作为昵称</small>
+                </div>
+            </div>
+
+            <div class="terms-checkbox">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">我已阅读并同意<a href="/terms" target="_blank">服务条款</a>和<a href="/privacy" target="_blank">隐私政策</a></label>
+            </div>
+
+            <button type="submit" class="submit-btn">注册</button>
+
+            <div class="form-footer">
+                <p>已有账号？<a href="/user/login">立即登录</a></p>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-footer" style="margin-top: 20px;">
+        <a href="/">返回首页</a> | <a href="/game">游客模式</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 头像预览
+        const avatarInput = document.getElementById('avatar-input');
+        const avatarPreview = document.getElementById('avatar-preview');
+
+        avatarInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarPreview.src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
+
+                // 检查文件大小
+                if (this.files[0].size > 2 * 1024 * 1024) {
+                    alert('头像图片不能超过2MB');
+                    this.value = '';
+                    avatarPreview.src = '/images/ui/default-avatar.png';
+                }
+            }
+        });
+
+        // 用户名验证
+        const usernameInput = document.getElementById('username');
+        const usernameError = document.getElementById('username-error');
+
+        usernameInput.addEventListener('blur', function() {
+            const username = this.value.trim();
+            if (username) {
+                // 格式验证
+                const usernamePattern = /^[a-zA-Z0-9_]{3,20}$/;
+                if (!usernamePattern.test(username)) {
+                    this.classList.add('is-invalid');
+                    usernameError.textContent = '用户名格式不正确';
+                    usernameError.style.display = 'block';
+                    return;
+                }
+
+                // 检查用户名是否可用
+                fetch(`/user/api/check-username?username=${encodeURIComponent(username)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.exists) {
+                            usernameInput.classList.add('is-invalid');
+                            usernameInput.classList.remove('is-valid');
+                            usernameError.textContent = '该用户名已被使用';
+                            usernameError.style.display = 'block';
+                        } else {
+                            usernameInput.classList.remove('is-invalid');
+                            usernameInput.classList.add('is-valid');
+                            usernameError.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('验证用户名失败:', error);
+                    });
+            }
+        });
+
+        // 邮箱验证
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('email-error');
+
+        emailInput.addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email) {
+                // 格式验证
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(email)) {
+                    this.classList.add('is-invalid');
+                    emailError.textContent = '邮箱格式不正确';
+                    emailError.style.display = 'block';
+                    return;
+                }
+
+                // 检查邮箱是否可用
+                fetch(`/user/api/check-email?email=${encodeURIComponent(email)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.exists) {
+                            emailInput.classList.add('is-invalid');
+                            emailInput.classList.remove('is-valid');
+                            emailError.textContent = '该邮箱已被使用';
+                            emailError.style.display = 'block';
+                        } else {
+                            emailInput.classList.remove('is-invalid');
+                            emailInput.classList.add('is-valid');
+                            emailError.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('验证邮箱失败:', error);
+                    });
+            }
+        });
+
+        // 密码强度验证
+        const passwordInput = document.getElementById('password');
+        const passwordStrength = document.getElementById('password-strength');
+        const passwordRequirements = {
+            length: document.getElementById('req-length'),
+            uppercase: document.getElementById('req-uppercase'),
+            lowercase: document.getElementById('req-lowercase'),
+            number: document.getElementById('req-number'),
+            special: document.getElementById('req-special')
+        };
+
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+
+            // 验证各项要求
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[^A-Za-z0-9]/.test(password)
+            };
+
+            // 更新要求列表样式
+            for (const [key, element] of Object.entries(passwordRequirements)) {
+                if (requirements[key]) {
+                    element.classList.add('met');
+                    element.innerHTML = `✓ ${element.textContent}`;
+                } else {
+                    element.classList.remove('met');
+                    element.innerHTML = element.textContent.replace('✓ ', '');
+                }
+            }
+
+            // 计算密码强度
+            let strength = 0;
+            Object.values(requirements).forEach(met => {
+                if (met) strength++;
+            });
+
+            // 更新强度显示
+            let strengthText = '';
+            let strengthClass = '';
+
+            switch (strength) {
+                case 0:
+                case 1:
+                    strengthText = '弱';
+                    strengthClass = 'text-danger';
+                    break;
+                case 2:
+                case 3:
+                    strengthText = '中';
+                    strengthClass = 'text-warning';
+                    break;
+                case 4:
+                case 5:
+                    strengthText = '强';
+                    strengthClass = 'text-success';
+                    break;
+            }
+
+            passwordStrength.textContent = `密码强度: ${strengthText}`;
+            passwordStrength.className = 'password-strength ' + strengthClass;
+
+            // 同时验证确认密码
+            validateConfirmPassword();
+        });
+
+        // 确认密码验证
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const confirmPasswordError = document.getElementById('confirm-password-error');
+
+        function validateConfirmPassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (confirmPassword) {
+                if (password !== confirmPassword) {
+                    confirmPasswordInput.classList.add('is-invalid');
+                    confirmPasswordInput.classList.remove('is-valid');
+                    confirmPasswordError.style.display = 'block';
+                } else {
+                    confirmPasswordInput.classList.remove('is-invalid');
+                    confirmPasswordInput.classList.add('is-valid');
+                    confirmPasswordError.style.display = 'none';
+                }
+            }
+        }
+
+        confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+
+        // 表单提交验证
+        const registerForm = document.querySelector('form');
+
+        registerForm.addEventListener('submit', function(event) {
+            // 验证用户名
+            if (usernameInput.classList.contains('is-invalid')) {
+                event.preventDefault();
+                usernameInput.focus();
+                return;
+            }
+
+            // 验证邮箱
+            if (emailInput.classList.contains('is-invalid')) {
+                event.preventDefault();
+                emailInput.focus();
+                return;
+            }
+
+            // 验证密码
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                confirmPasswordInput.classList.add('is-invalid');
+                confirmPasswordError.style.display = 'block';
+                confirmPasswordInput.focus();
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

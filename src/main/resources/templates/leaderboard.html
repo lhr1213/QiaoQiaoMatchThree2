@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巧巧消消乐 - 排行榜</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <style>
+        .leaderboard-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .tab:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .leaderboard-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+
+        .leaderboard-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .leaderboard-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .rank {
+            font-weight: bold;
+            text-align: center;
+            width: 50px;
+        }
+
+        .top-rank {
+            font-size: 1.2em;
+            color: var(--primary-color);
+        }
+
+        .score {
+            font-weight: bold;
+            color: var(--text-color);
+            text-align: right;
+        }
+
+        .date {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .no-scores {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .leaderboard-tabs {
+                flex-wrap: wrap;
+            }
+
+            .date {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="leaderboard-container">
+    <div class="leaderboard-header">
+        <h1>巧巧消消乐排行榜</h1>
+        <p>看看谁是消除大师！</p>
+    </div>
+
+    <div class="leaderboard-tabs">
+        <div class="tab active" data-mode="all">全部</div>
+        <div class="tab" data-mode="classic">经典模式</div>
+        <div class="tab" data-mode="timed">限时模式</div>
+        <div class="tab" data-mode="challenge">挑战模式</div>
+        <div class="tab" data-mode="friends">好友榜</div>
+    </div>
+
+    <table class="leaderboard-table">
+        <thead>
+        <tr>
+            <th class="rank">#</th>
+            <th>玩家</th>
+            <th class="score">分数</th>
+            <th class="date">日期</th>
+        </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+        <!-- 通过Thymeleaf模板生成 -->
+        <tr th:each="score, status : ${scores}">
+            <td class="rank" th:classappend="${status.index < 3 ? 'top-rank' : ''}">
+                <span th:text="${status.index + 1}">1</span>
+            </td>
+            <td>
+                <span th:text="${score.user != null ? score.user.nickname : '游客'}">玩家名称</span>
+            </td>
+            <td class="score">
+                <span th:text="${score.score}">1000</span>
+            </td>
+            <td class="date">
+                <span th:text="${#temporals.format(score.createdAt, 'yyyy-MM-dd HH:mm')}">2025-05-10</span>
+            </td>
+        </tr>
+
+        <!-- 示例数据（仅用于演示） -->
+        <tr>
+            <td class="rank top-rank">1</td>
+            <td>小巧</td>
+            <td class="score">5230</td>
+            <td class="date">2025-05-10 14:23</td>
+        </tr>
+        <tr>
+            <td class="rank top-rank">2</td>
+            <td>消消大师</td>
+            <td class="score">4980</td>
+            <td class="date">2025-05-09 18:45</td>
+        </tr>
+        <tr>
+            <td class="rank top-rank">3</td>
+            <td>三消王子</td>
+            <td class="score">4720</td>
+            <td class="date">2025-05-11 10:33</td>
+        </tr>
+        <tr>
+            <td class="rank">4</td>
+            <td>消除小天才</td>
+            <td class="score">4150</td>
+            <td class="date">2025-05-08 22:15</td>
+        </tr>
+        <tr>
+            <td class="rank">5</td>
+            <td>巧巧爱好者</td>
+            <td class="score">3890</td>
+            <td class="date">2025-05-07 20:05</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="navigation">
+        <a href="/" class="btn">返回首页</a>
+        <a href="/game" class="btn">开始游戏</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 切换标签
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                tabs.forEach(t => t.classList.remove('active'));
+                // 添加当前标签的active类
+                this.classList.add('active');
+
+                // 获取模式
+                const mode = this.getAttribute('data-mode');
+
+                // 如果是真实环境，这里会加载相应的数据
+                // 但在示例中，我们只是在控制台显示切换信息
+                console.log(`切换到 ${mode} 模式`);
+
+                // 在真实环境中，这里会发起AJAX请求获取数据
+                if (mode !== 'all') {
+                    // 模拟加载数据
+                    fetch(`/score/api/leaderboard/${mode}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // 更新表格内容
+                            updateLeaderboard(data);
+                        })
+                        .catch(error => {
+                            console.error('获取排行榜数据失败:', error);
+                        });
+                } else {
+                    // 加载所有模式的数据
+                    fetch('/score/api/leaderboard')
+                        .then(response => response.json())
+                        .then(data => {
+                            // 更新表格内容
+                            updateLeaderboard(data);
+                        })
+                        .catch(error => {
+                            console.error('获取排行榜数据失败:', error);
+                        });
+                }
+            });
+        });
+
+        // 更新排行榜表格
+        function updateLeaderboard(data) {
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="4" class="no-scores">暂无记录</td>`;
+                tbody.appendChild(row);
+                return;
+            }
+
+            data.forEach((score, index) => {
+                const row = document.createElement('tr');
+                const isTopRank = index < 3 ? 'top-rank' : '';
+
+                row.innerHTML = `
+                        <td class="rank ${isTopRank}">${index + 1}</td>
+                        <td>${score.user ? score.user.nickname : '游客'}</td>
+                        <td class="score">${score.score}</td>
+                        <td class="date">${formatDate(score.createdAt)}</td>
+                    `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+    });
+</script>
+</body>
+</html>

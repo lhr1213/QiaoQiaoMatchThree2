@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巧巧消消乐 - 登录</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .login-form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #f8bbd0;
+            border-radius: 30px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #e91e63;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .form-footer a:hover {
+            color: #e91e63;
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-danger {
+            background-color: #ffebee;
+            border: 1px solid #ef9a9a;
+            color: #c62828;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            color: #2e7d32;
+        }
+
+        .form-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .form-divider::before,
+        .form-divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #f8bbd0;
+        }
+
+        .form-divider span {
+            padding: 0 10px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f8f8;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="form-header">
+        <h1>巧巧消消乐</h1>
+        <p>登录账户开始游戏</p>
+    </div>
+
+    <div class="login-form">
+        <!-- 错误提示 -->
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}">
+            用户名或密码错误
+        </div>
+
+        <!-- 成功提示 -->
+        <div th:if="${message}" class="alert alert-success" th:text="${message}">
+            注册成功，请登录
+        </div>
+
+        <form action="/user/login" method="post">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="submit-btn">登录</button>
+
+            <div class="form-footer">
+                <p>还没有账号？<a href="/user/register">立即注册</a></p>
+                <p><a href="/user/forgot-password">忘记密码？</a></p>
+            </div>
+
+            <div class="form-divider">
+                <span>或者使用</span>
+            </div>
+
+            <div class="social-login">
+                <a href="/oauth2/authorization/google" class="social-btn">
+                    <img src="/images/ui/google.png" alt="Google" width="24" height="24">
+                </a>
+                <a href="/oauth2/authorization/facebook" class="social-btn">
+                    <img src="/images/ui/facebook.png" alt="Facebook" width="24" height="24">
+                </a>
+                <a href="/oauth2/authorization/weixin" class="social-btn">
+                    <img src="/images/ui/wechat.png" alt="WeChat" width="24" height="24">
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-footer" style="margin-top: 20px;">
+        <a href="/">返回首页</a> | <a href="/game">游客模式</a>
+    </div>
+</div>
+</body>
+</html>

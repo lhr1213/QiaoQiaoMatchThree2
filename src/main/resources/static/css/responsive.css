@@ -1,0 +1,116 @@
+/* 响应式布局样式 */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .game-info {
+        font-size: 1rem;
+    }
+
+    .game-board {
+        gap: 4px;
+        padding: 6px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    .modal-content {
+        padding: 20px;
+        width: 90%;
+    }
+
+    .modal h2 {
+        font-size: 1.5rem;
+    }
+
+    .modal p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    .game-info {
+        font-size: 0.9rem;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .game-board {
+        gap: 3px;
+        padding: 4px;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+
+    .game-controls {
+        gap: 10px;
+    }
+
+    .tile.selected {
+        transform: scale(1.05);
+    }
+
+    .score-popup {
+        font-size: 1rem;
+    }
+}
+
+/* 横屏模式优化 */
+@media (max-height: 600px) and (orientation: landscape) {
+    .game-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        max-width: 100%;
+    }
+
+    header {
+        width: 30%;
+        margin-bottom: 0;
+    }
+
+    .game-board {
+        max-width: 50vh;
+    }
+
+    .game-controls {
+        flex-direction: column;
+        margin-top: 0;
+    }
+}
+
+/* 平板设备优化 */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .game-container {
+        max-width: 90%;
+    }
+
+    .game-board {
+        max-width: 500px;
+    }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) {
+    .tile:hover {
+        transform: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+}
