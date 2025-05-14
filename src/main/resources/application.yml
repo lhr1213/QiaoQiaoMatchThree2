@@ -37,11 +37,6 @@ spring:
     encoding: UTF-8
 
   # 静态资源配置
-  resources:
-    static-locations: classpath:/static/
-    cache:
-      period: 3600
-
   # 文件上传配置
   servlet:
     multipart:
@@ -55,6 +50,11 @@ spring:
       write-dates-as-timestamps: false
     time-zone: Asia/Shanghai
     date-format: yyyy-MM-dd HH:mm:ss
+  web:
+    resources:
+      static-locations: classpath:/static/
+      cache:
+        period: 3600
 
 # 服务器配置
 server:
